@@ -1,0 +1,11 @@
+name: Java CI with Maven
+on:
+ push:
+  branches: [main]
+
+jobs:
+  builds:
+    run-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
