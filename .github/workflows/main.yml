@@ -11,4 +11,3 @@ jobs:
       uses: actions/checkout@v4
     - name: Build Java package
       run: mvn clean install -f Javarepo1/pom.xml
-      - name: SonarCloud Scan
