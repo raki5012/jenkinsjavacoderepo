@@ -1,45 +1,59 @@
-name: Java CI Demo
+name: Multi-Job Java CI Demo
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  # 1️⃣ Build job with matrix
+  # 1️⃣ Build Job
   build:
-    name: Build and Test on Java ${{ matrix.java }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [11, 17]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK ${{ matrix.java }}
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: ${{ matrix.java }}
+          java-version: 17
 
-      - name: Build with Maven
-        run: mvn -B clean install -f Javarepo1/pom.xml
+      - name: Build Project
+        run: mvn -B compile -f Javarepo1/pom.xml
 
-      - name: Upload JAR
+      - name: Upload Compiled Classes
         uses: actions/upload-artifact@v4
         with:
-          name: myapp-java${{ matrix.java }}
-          path: Javarepo1/target/*.jar
+          name: compiled-classes
+          path: Javarepo1/target/
 
-  # 2️⃣ Deploy job runs only if build is successful
-  deploy:
+  # 2️⃣ Test Job (depends on build)
+  test:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download Artifact
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Download Compiled Classes
         uses: actions/download-artifact@v4
         with:
-          path: downloaded-jars
+          name: compiled-classes
+          path: Javarepo1/target/
 
-      - name: Show Artifacts
-        run: ls -R downloaded-jars
+      - name: Run Unit Tests
+        run: mvn test -f Javarepo1/pom.xml
+
+  # 3️⃣ Deploy Job (only if tests pass)
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pretend Deploy
+        run: echo "🚀 Deployment step would go here!"
