@@ -1,19 +1,45 @@
-name: Java CI with Maven
+name: Java CI Demo
+
 on:
- push:
-  branches: [main]
+  push:
+    branches: [ main ]
 
 jobs:
-  builds:
+  # 1️⃣ Build job with matrix
+  build:
+    name: Build and Test on Java ${{ matrix.java }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [8, 11, 17]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Build with Maven
+        run: mvn -B clean install -f Javarepo1/pom.xml
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: myapp-java${{ matrix.java }}
+          path: Javarepo1/target/*.jar
+
+  # 2️⃣ Deploy job runs only if build is successful
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-    - name: Build Java package
-      run: mvn clean install -f Javarepo1/pom.xml
-    - name: Upload JAR Artifact
-      uses: actions/upload-artifact@v4
-      with:
-       name: my-java-artifact
-       path: Javarepo1/target/*.jar
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          path: downloaded-jars
 
+      - name: Show Artifacts
+        run: ls -R downloaded-jars
