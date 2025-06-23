@@ -1,5 +1,4 @@
 name: Parallelism vs Concurrency Demo
-
 on:
   push:
     branches: [ main ]
