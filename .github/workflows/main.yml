@@ -2,7 +2,6 @@ name: Parallelism vs Concurrency Demo
 on:
   push:
     branches: [ main ]
-
 concurrency:
   group: "ci-${{ github.ref }}"  # 1 workflow per branch
   cancel-in-progress: true       # Cancel older if new one comes
