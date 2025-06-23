@@ -5,7 +5,6 @@ on:
 concurrency:
   group: "ci-${{ github.ref }}"  # 1 workflow per branch
   cancel-in-progress: true       # Cancel older if new one comes
-
 jobs:
   job1:
     name: Parallel Job 1
