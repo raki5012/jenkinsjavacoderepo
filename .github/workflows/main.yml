@@ -1,42 +1,12 @@
-name: Parallelism vs Concurrency Demo
+name: Java CI with Maven
 on:
-  push:
-    branches: [ main ]
-concurrency:
-  group: "ci-${{ github.ref }}"  # 1 workflow per branch
-  cancel-in-progress: true       # Cancel older if new one comes
+ push:
+  branches: [main]
 jobs:
-  job1:
-    name: Parallel Job 1
+  cohort-builds:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🏃‍♂️ Job 1 started"
-      - run: sleep 15
-      - run: echo "✅ Job 1 finished"
-
-  job2:
-    name: Parallel Job 2
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "🏃‍♀️ Job 2 started"
-      - run: sleep 10
-      - run: echo "✅ Job 2 finished"
-
-  matrix-job:
-    name: Matrix Java Test (${{ matrix.java }})
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [11, 17]
-    steps:
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: ${{ matrix.java }}
-
-      - name: Simulate Build
-        run: |
-          echo "🛠️ Testing on Java ${{ matrix.java }}"
-          sleep 5
-          echo "✅ Done with Java ${{ matrix.java }}"
+    - name: Checkout Code
+      run: git clone "https://github.com/prateekniet/jenkinsjavacoderepo.git"
+    - name: Build Java package
+      run: mvn clean install -f Javarepo1/pom.xml
