@@ -9,4 +9,4 @@ jobs:
     - name: Checkout Code
       run: git clone "https://github.com/prateekniet/jenkinsjavacoderepo.git"
     - name: Build Java package
-      run: mvn clean install -f Javarepo1/pom.xml
+      run: mvn clean install -f jenkinsjavacoderepo/Javarepo1/pom.xml
