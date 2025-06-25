@@ -7,6 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: action/checkout@4
+      uses: actions/checkout@v4
     - name: Buld java package
       run: mvn clean install -f javarepo1/pom.xml
