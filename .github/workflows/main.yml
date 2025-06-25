@@ -1,17 +1,12 @@
-name: Java CI with Maven
-on:
- push:
-  branches: [main]
+name: java ci 
+  on:
+    push:
+      branches: [main]
 jobs:
-  cohort-builds:
+  builds:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      run: git clone "https://github.com/prateekniet/jenkinsjavacoderepo.git"
-    - name: Build Java package
-      run: mvn clean install -f jenkinsjavacoderepo/Javarepo1/pom.xml
-    - name: Upload JAR Artifact
-      uses: actions/upload-artifact@v4
-      with:
-       name: my-java-artifact
-       path: jenkinsjavacoderepo/Javarepo1/target/*.jar
+      uses: action/checkout@4
+    - name: Buld java package
+      run: mvn clean install -f javarepo1/pom.xml
