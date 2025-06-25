@@ -9,4 +9,4 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
     - name: Buld java package
-      run: mvn clean install -f javarepo1/pom.xml
+      run: mvn clean install -f Javarepo1/pom.xml
